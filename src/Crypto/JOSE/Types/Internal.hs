@@ -40,6 +40,7 @@ import Data.Monoid ((<>))
 import Data.Tuple (swap)
 import Data.Word (Word8)
 
+import Control.Applicative ((<|>))
 import Control.Lens
 import Control.Lens.Cons.Extras
 import Crypto.Number.Basic (log2)
@@ -85,7 +86,7 @@ base64url ::
   ) => Prism' s1 s2
 base64url = reconsIso . b64u . reconsIso
   where
-    b64u = prism B64U.encodeUnpadded (\s -> first (const s) (B64U.decodeUnpadded s))
+    b64u = prism B64U.encodeUnpadded (\s -> first (const s) (B64U.decodeUnpadded s <|> B64U.decodePadded s))
     reconsIso = iso (view recons) (view recons)
 {-# INLINE base64url #-}
 

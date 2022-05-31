@@ -524,14 +524,14 @@ cfrgSpec = describe "RFC 8037 signature/validation test vectors" $ do
 
 base64urlSpec :: Spec
 base64urlSpec = describe "base64url-decoding behaviour" $
-  it "rejects baseurl-encoded values with padding" $
+  it "accepts baseurl-encoded values with padding" $
     -- from https://github.com/frasertweedale/hs-jose/issues/99
     --  and https://github.com/frasertweedale/hs-jose/issues/97
     let
       inJws = "{\"signature\":\"fake\",\"protected\":\"eyJraWQiOiI1ODJhMTdkZS0zYjg4LTQxZTgtOGM3MC0zZjBkNmYwMDNmY2QiLCJhbGciOiJSUzI1NiJ9\",\"payload\":\"eyJ1c2VybmFtZSI6Imp1c3BheSIsImdzdGluIjoiMjBhYWFhYTEyMzRhMWEyIn0=\"}"
     in
       (eitherDecode inJws :: Either String (FlattenedJWS JWSHeader))
-        `shouldSatisfy` is _Left
+        `shouldSatisfy` is _Right
 
 reserialiseSpec :: Spec
 reserialiseSpec = describe "reserialisation of JWS" $
